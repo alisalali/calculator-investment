@@ -1,14 +1,20 @@
+import { useState } from "react";
 import Header from "./components/Header/Header";
 import ResultTable from "./components/ResultTable/ResultTable";
 import UserInput from "./components/UserInput/UserInput";
 
 function App() {
+  const [userInput, setUserInput] = useState(null);
   const calculateHandler = (userInput) => {
     // Should be triggered when form is submitted
     // You might not directly want to bind it to the submit event on the form though...
 
-    const yearlyData = []; // per-year results
+    // do something with yearlyData ...
+    setUserInput(userInput);
+  };
+  const yearlyData = []; // per-year results
 
+  if (userInput) {
     let currentSavings = +userInput["current-savings"]; // feel free to change the shape of this input object!
     const yearlyContribution = +userInput["yearly-contribution"]; // as mentioned: feel free to change the shape...
     const expectedReturn = +userInput["expected-return"] / 100;
@@ -26,19 +32,24 @@ function App() {
         yearlyContribution: yearlyContribution,
       });
     }
-
-    // do something with yearlyData ...
-  };
-
+  }
   return (
     <div>
       <Header />
 
-      <UserInput />
+      <UserInput onCalculate={calculateHandler} />
 
       {/* Todo: Show below table conditionally (only once result data is available) */}
       {/* Show fallback text if no data is available */}
-      <ResultTable />
+      {!userInput && (
+        <p style={{ textAlign: "center" }}>No Investment calculate yet</p>
+      )}
+      {userInput && (
+        <ResultTable
+          data={yearlyData}
+          initialInvestment={userInput["current-savings"]}
+        />
+      )}
     </div>
   );
 }

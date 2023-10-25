@@ -7,12 +7,12 @@ const initialUserInput = {
   "expected-return": 7,
   duration: 10,
 };
-const UserInput = () => {
+const UserInput = (props) => {
   const [userInput, setUserInput] = useState(initialUserInput);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("submit");
+    props.onCalculate(userInput);
   };
   const restHandler = () => {
     console.log("rest");
